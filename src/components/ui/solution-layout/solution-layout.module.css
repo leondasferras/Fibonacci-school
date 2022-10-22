@@ -24,6 +24,9 @@
   padding: 36px;
   height: 693px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .returnButton {
@@ -43,4 +46,5 @@
 
 .link {
   text-decoration: none;
+  align-self: flex-start;
 }

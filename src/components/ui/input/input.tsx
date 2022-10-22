@@ -1,10 +1,11 @@
-import React from "react";
+import {ChangeEventHandler} from "react";
 import styles from "./input.module.css";
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   placeholder?: string;
   extraClass?: string;
   isLimitText?: boolean;
+  getInputValue: (text:string)=>void;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -14,12 +15,18 @@ export const Input: React.FC<InputProps> = ({
   maxLength,
   max,
   isLimitText = false,
+  getInputValue,
   ...rest
 }) => {
   const limitText =
     type === "text"
-      ? `Максимум — ${maxLength} символа`
+      ? `Максимум — ${maxLength} символов`
       : `Максимальное число — ${max}`;
+  
+const handleInput:ChangeEventHandler<HTMLInputElement> = (e) => {
+  getInputValue(e.target.value)
+}
+
 
   return (
     <div className={`${styles.content} ${extraClass}`}>
@@ -29,11 +36,12 @@ export const Input: React.FC<InputProps> = ({
         type={type}
         maxLength={maxLength}
         max={max}
+        onChange={handleInput}
         {...rest}
       />
       {isLimitText && (
         <span
-          className={`text text_type_input-lim text_color_input mt-2 ml-8 ${styles.limit}`}
+          className={`${styles.limit}text text_type_input-lim text_color_input mt-2 ml-8 `}
         >
           {limitText}
         </span>
