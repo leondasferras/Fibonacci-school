@@ -1,0 +1,20 @@
+.buttonsWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0 auto;
+  width:860px;
+}
+
+.inputWrapper {
+  margin-right: 10px;
+  display: grid;
+  grid-template-columns: 370px 130px 130px;
+  gap:10px;
+  margin-bottom: 50px;
+}
+
+.circlesWrapper {
+  display: flex;
+  flex-direction: row;
+}

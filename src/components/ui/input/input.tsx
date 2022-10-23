@@ -5,7 +5,7 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
   placeholder?: string;
   extraClass?: string;
   isLimitText?: boolean;
-  getInputValue: (text:string)=>void;
+  getInputValue: (text:any)=>void;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -16,6 +16,7 @@ export const Input: React.FC<InputProps> = ({
   max,
   isLimitText = false,
   getInputValue,
+  value,
   ...rest
 }) => {
   const limitText =
@@ -37,6 +38,7 @@ const handleInput:ChangeEventHandler<HTMLInputElement> = (e) => {
         maxLength={maxLength}
         max={max}
         onChange={handleInput}
+        value = {value}
         {...rest}
       />
       {isLimitText && (

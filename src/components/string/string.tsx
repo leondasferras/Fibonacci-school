@@ -1,4 +1,4 @@
-import { ReactElement, useState, FC, useRef, ReactComponentElement } from "react";
+import { useState} from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./string.module.css";
 import { Input } from "../ui/input/input";
@@ -11,12 +11,13 @@ import { swap } from "../../utils/swap";
 
 export const StringComponent: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [string, setString] = useState<string>('');
+  const [string, setString] = useState('');
   const [circles, setCircles] = useState<Array<any>>([]);
 
   
 
   const reverseCircles = async () => {
+    setIsLoading(true)
     let circlesWithStatus:Array<any> = [];
     string.split('').forEach((el) => {circlesWithStatus.push({el:el,state:ElementStates.Default})})
     setCircles(circlesWithStatus)
@@ -28,10 +29,10 @@ export const StringComponent: React.FC = () => {
       while (start<=end) {
       circlesWithStatus[start].state = ElementStates.Changing;
       circlesWithStatus[end].state = ElementStates.Changing;
-      await timeout(1500)
+      await timeout(DELAY_IN_MS)
       setCircles([...circlesWithStatus])
       swap(start,end,circlesWithStatus)
-      await timeout(1500)
+      await timeout(DELAY_IN_MS)
       circlesWithStatus[start].state = ElementStates.Modified;
       circlesWithStatus[end].state = ElementStates.Modified;
       setCircles([...circlesWithStatus])
@@ -39,6 +40,7 @@ export const StringComponent: React.FC = () => {
       start++;
       end--;
     }
+    setIsLoading(false)
   }
 
   return (
@@ -52,14 +54,14 @@ export const StringComponent: React.FC = () => {
         ></Input>
         <Button
           onClick={() => {
-            setIsLoading(true);
             reverseCircles()
           }}
           text="Развернуть"
+          isLoader={isLoading}
         ></Button>
       </div>
-      <div className={styles.circlesContainer}>
-        {circles.map(el => <Circle state={el.state} letter={el.el}/>) }
+      <div className={`${styles.circlesContainer} mt-10 `}>
+        {circles.map((el, i) => <Circle extraClass="mr-4" key = {i.toString()} state={el.state} letter={el.el}/>) }
       </div>
     </SolutionLayout>
   );
