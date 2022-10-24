@@ -5,7 +5,7 @@ import { ElementStates } from "../../../types/element-states";
 export interface CircleProps {
   state?: ElementStates;
   letter?: string|number;
-  head?: string | React.ReactElement | null;
+  head?: string | number | React.ReactElement | null;
   index?: number;
   tail?: string | React.ReactElement | null;
   tailType?: "string" | "element";
