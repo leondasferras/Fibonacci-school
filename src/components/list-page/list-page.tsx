@@ -18,7 +18,7 @@ export const ListPage: React.FC = () => {
   }
 
   const [number, setNumber] = useState<number | string>("");
-  const [index, setIndex] = useState<number | ''>('');
+  const [index, setIndex] = useState<number | "">("");
   const [array, setArray] = useState<Array<ICircleElement>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -253,8 +253,15 @@ export const ListPage: React.FC = () => {
         <Button
           onClick={addByIndex}
           text="Добавить по индексу"
-          disabled={isLoading || index! < 0 ||
-            index! > array.length - 1 || !number || !index ? true : undefined}
+          disabled={
+            isLoading ||
+            index! < 0 ||
+            index! > array.length - 1 ||
+            !number ||
+            !index
+              ? true
+              : undefined
+          }
         />
         <Button
           onClick={deleteByIndex}
