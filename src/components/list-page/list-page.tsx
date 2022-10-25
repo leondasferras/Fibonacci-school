@@ -8,6 +8,7 @@ import { ElementStates } from "../../types/element-states";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { timeout } from "../../utils/timeout";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { time } from "console";
 
 
 export const ListPage: React.FC = () => {
@@ -119,26 +120,88 @@ const deleteFromTail = async() => {
   setIsLoading(false)
 }
 
-const addByIndex = () => {
+const addByIndex = async () => {
+
+  if (index == 0) {
+    addToHead()
+    return
+  }
+
   setIsLoading(true)
   const tempArr = array;
+
+
+
+  for (let i = 0; i<=index!; i++) {
+    const prevHead = tempArr[i].head
+    tempArr[i].state = ElementStates.Changing
+    tempArr[i].head = <Circle isSmall={true} state={ElementStates.Changing} letter = {number} />
+    setArray([...tempArr])
+    await timeout(SHORT_DELAY_IN_MS)
+    tempArr[i].head = prevHead 
+  }
+  
+  tempArr[index!].state = ElementStates.Default
   tempArr.splice(index!, 0, {
     el:number,
     state:ElementStates.Default,
     head: null,
     tail: null
   })
+ 
+  tempArr[index!].state = ElementStates.Modified
+
+  setArray([...tempArr])
+  await timeout(SHORT_DELAY_IN_MS)
+  tempArr.forEach((el) => el.state = ElementStates.Default)
+
   setArray([...tempArr])
   setIsLoading(false)
 }
 
-const deleteByIndex = () => {
+
+
+const deleteByIndex = async() => {
+  if (index == 0) {
+    deleteFromHead()
+    return
+  }
+
+  if (index == array.length-1) {
+    deleteFromTail()
+    return
+  }
+
   setIsLoading(true)
   const tempArr = array;
-  tempArr.splice(index!, 1)
+
+  for (let i = 0; i<=index!; i++) {
+    tempArr[i].state = ElementStates.Changing
+    setArray([...tempArr])
+    await timeout(SHORT_DELAY_IN_MS)
+}
+
+
+
+tempArr[index!].tail = <Circle isSmall={true} state={ElementStates.Changing} letter = {tempArr[index!].el} />
+tempArr[index!].el=''
+setArray([...tempArr])
+await timeout(SHORT_DELAY_IN_MS)
+tempArr[index!].tail = ''
+tempArr[index!].state = ElementStates.Default
+
+tempArr.splice(index!, 1)
+
+
+  setArray([...tempArr])
+  await timeout(SHORT_DELAY_IN_MS)
+  tempArr.forEach((el) => el.state = ElementStates.Default)
+
+
   setArray([...tempArr])
   setIsLoading(false)
 }
+
 
 
 
@@ -152,9 +215,9 @@ const deleteByIndex = () => {
         <Button onClick={addToTail} text="Добавить в tail" disabled={isLoading || !number ? true : undefined}/>
         <Button onClick={deleteFromHead} text="Удалить из head" disabled={isLoading || array.length<2 ? true : undefined}/>
         <Button onClick={deleteFromTail} text="Удалить из tail" disabled={isLoading || array.length<2 ? true : undefined}/>
-        <Input max={9} type="number" getInputValue={setIndex} value={index} placeholder='Введите индекс'/>
+        <Input max={array.length-1} type="number" getInputValue={setIndex} value={index} placeholder='Введите индекс' isLimitText={true}/>
         <Button onClick={addByIndex} text="Добавить по индексу" disabled={isLoading || !number || !index ? true : undefined}/>
-        <Button onClick={deleteByIndex} text="Удалить по индексу" disabled={isLoading || array.length<2 ? true : undefined}/>
+        <Button onClick={deleteByIndex} text="Удалить по индексу" disabled={isLoading || !index || array.length<2 || index!<0 || index!>array.length-1 ? true : undefined}/>
 
       </div>
       <div className={styles.circlesWrapper}>
