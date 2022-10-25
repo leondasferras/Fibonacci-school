@@ -57,8 +57,10 @@ export const SortingPage: React.FC = () => {
             ? sortedArray[j].el < sortedArray[targetValue].el
             : sortedArray[j].el > sortedArray[targetValue].el
         ) {
-          sortedArray[targetValue].state = ElementStates.Changing;
+          sortedArray[targetValue].state = ElementStates.Default;
+          sortedArray[i].state = ElementStates.Changing;
           targetValue = j;
+          sortedArray[targetValue].state = ElementStates.Changing;
           setArrayToRender([...sortedArray]);
         }
 
