@@ -11,62 +11,33 @@ import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ICircleElement } from "../list-page/list-page";
 
 export const QueuePage: React.FC = () => {
-
-  const queue = useMemo(() => new Queue<ICircleElement>(6), []);
-
-  console.log(queue)
+  const queue = useMemo(() => new Queue<string>(7), []);
   const DefaultArray = Array.from({ length: 7 }, (v, i) => ({
     el: "",
     state: ElementStates.Default,
-    isTail: false,
-    isHead: false,
+    tail: "",
+    head: "",
   }));
+
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [queueArray, setQueueArray] = useState<
-    Array<{
-      el: number | string;
-      state: ElementStates;
-      isTail: boolean;
-      isHead: boolean;
-    }>
-  >(DefaultArray);
+  const [queueArray, setQueueArray] =
+    useState<Array<ICircleElement>>(DefaultArray);
 
   const handleAddElement = async () => {
     setIsLoading(true);
-    const tempArray = queueArray;
-    const n = tempArray.length;
-
-    const moveTail = () => {
-      const currentTail = tempArray.findIndex((item) => item.isTail === true);
-      tempArray[currentTail].isTail = false;
-      if (tempArray[currentTail + 1].el)
-        tempArray[currentTail + 1].isTail = true;
-    };
-
-    const targetElement = tempArray
-      .reverse()
-      .findIndex((item) => item.el !== "");
-    tempArray.reverse();
-    if (targetElement === -1) {
-      tempArray[0].state = ElementStates.Changing;
-      tempArray[0].el = inputValue;
-      tempArray[0].isHead = true;
-      tempArray[0].isTail = true;
-
-      setQueueArray([...tempArray]);
-      await timeout(SHORT_DELAY_IN_MS);
-      tempArray[0].state = ElementStates.Default;
-    } else {
-      tempArray[n - targetElement].state = ElementStates.Changing;
-      tempArray[n - targetElement].el = inputValue;
-      moveTail();
-      setQueueArray([...tempArray]);
-      await timeout(SHORT_DELAY_IN_MS);
-      tempArray[n - targetElement].state = ElementStates.Default;
+    const tempArr = queueArray;
+    tempArr[queue.getHead()].head = "head";
+    tempArr[queue.getTail()].tail = "tail";
+    if (queue.getTail() > 0) {
+      tempArr[queue.getTail() - 1].tail = "";
     }
-
-    setQueueArray([...tempArray]);
+    queue.enqueue(inputValue);
+    tempArr[queue.getTail() - 1].el = queue.container[queue.getTail() - 1]!;
+    tempArr[queue.getTail() - 1].state = ElementStates.Changing;
+    await timeout(SHORT_DELAY_IN_MS);
+    tempArr[queue.getTail() - 1].state = ElementStates.Default;
+    setQueueArray([...tempArr]);
     setInputValue("");
     setIsLoading(false);
   };
@@ -74,28 +45,25 @@ export const QueuePage: React.FC = () => {
   const handleDeleteElement = async () => {
     setIsLoading(true);
     const tempArray = queueArray;
-    const targetElement = tempArray.findIndex((item) => item.el !== "");
-    const moveHead = () => {
-      const currentHead = tempArray.findIndex((item) => item.isHead === true);
-      tempArray[currentHead].isHead = false;
-      if (tempArray[currentHead + 1]?.el)
-        tempArray[currentHead + 1].isHead = true;
-    };
+    tempArray[queue.getHead()].state = ElementStates.Changing
+    await timeout(SHORT_DELAY_IN_MS)
+    tempArray[queue.getHead()].state = ElementStates.Default
+    tempArray[queue.getHead()].el = "";
+    tempArray[queue.getHead()].head = "";
 
-    tempArray[targetElement].state = ElementStates.Changing;
-    setQueueArray([...tempArray]);
-    await timeout(SHORT_DELAY_IN_MS);
-
-    tempArray[targetElement].el = "";
-    tempArray[targetElement].isTail = false;
-    tempArray[targetElement].state = ElementStates.Default;
-
-    moveHead();
-    setQueueArray([...tempArray]);
+    if (queue.getTail() - queue.getHead() === 1) {
+      queue.clear();
+      setQueueArray([...DefaultArray]);
+    } else {
+      queue.dequeue();
+      tempArray[queue.getHead()].head = "head";
+      setQueueArray([...tempArray]);
+    }
     setIsLoading(false);
   };
 
   const handleResetQueue = async () => {
+    queue.clear();
     setQueueArray([...DefaultArray]);
   };
 
@@ -143,8 +111,8 @@ export const QueuePage: React.FC = () => {
               state={el.state}
               key={i}
               index={i}
-              head={el.isHead ? "Head" : ""}
-              tail={el.isTail ? "Tail" : ""}
+              head={el.head}
+              tail={el.tail}
             />
           );
         })}

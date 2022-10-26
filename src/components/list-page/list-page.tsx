@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./list-page.module.css";
 import { Input } from "../ui/input/input";
@@ -8,6 +8,7 @@ import { ElementStates } from "../../types/element-states";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { timeout } from "../../utils/timeout";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { LinkedList } from "../../classes/linkedList";
 
 export interface ICircleElement {
   el: number | string;
@@ -21,6 +22,10 @@ export const ListPage: React.FC = () => {
   const [index, setIndex] = useState("");
   const [array, setArray] = useState<Array<ICircleElement>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+
+
+
 
   const setDefaultArray = () => {
     const numArr = [0, 34, 8, 1];
@@ -40,6 +45,11 @@ export const ListPage: React.FC = () => {
   useEffect(() => {
     setDefaultArray();
   }, []);
+
+
+  const linkedList = useMemo(()=> new LinkedList,[])
+
+
 
   const addToHead = async () => {
     setIsLoading(true);
