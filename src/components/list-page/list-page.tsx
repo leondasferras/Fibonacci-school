@@ -9,16 +9,16 @@ import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { timeout } from "../../utils/timeout";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
-export const ListPage: React.FC = () => {
-  interface ICircleElement {
-    el: number | string;
-    state: ElementStates;
-    head: string | number | React.ReactElement | null;
-    tail: string | React.ReactElement | null;
-  }
+export interface ICircleElement {
+  el: number | string;
+  state: ElementStates;
+  head?: string | number | React.ReactElement | null;
+  tail?: string | React.ReactElement | null;
+}
 
+export const ListPage: React.FC = () => {
   const [number, setNumber] = useState<number | string>("");
-  const [index, setIndex] = useState<number | "">("");
+  const [index, setIndex] = useState("");
   const [array, setArray] = useState<Array<ICircleElement>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -132,7 +132,7 @@ export const ListPage: React.FC = () => {
   };
 
   const addByIndex = async () => {
-    if (index == 0) {
+    if (Number(index) == 0) {
       addToHead();
       return;
     }
@@ -140,7 +140,7 @@ export const ListPage: React.FC = () => {
     setIsLoading(true);
     const tempArr = array;
 
-    for (let i = 0; i <= index!; i++) {
+    for (let i = 0; i <= Number(index); i++) {
       const prevHead = tempArr[i].head;
       tempArr[i].state = ElementStates.Changing;
       tempArr[i].head = (
@@ -170,12 +170,12 @@ export const ListPage: React.FC = () => {
   };
 
   const deleteByIndex = async () => {
-    if (index == 0) {
+    if (Number(index) == 0) {
       deleteFromHead();
       return;
     }
 
-    if (index == array.length - 1) {
+    if (Number(index) == array.length - 1) {
       deleteFromTail();
       return;
     }
@@ -183,7 +183,7 @@ export const ListPage: React.FC = () => {
     setIsLoading(true);
     const tempArr = array;
 
-    for (let i = 0; i <= index!; i++) {
+    for (let i = 0; i <= Number(index); i++) {
       tempArr[i].state = ElementStates.Changing;
       setArray([...tempArr]);
       await timeout(SHORT_DELAY_IN_MS);
@@ -255,8 +255,8 @@ export const ListPage: React.FC = () => {
           text="Добавить по индексу"
           disabled={
             isLoading ||
-            index! < 0 ||
-            index! > array.length - 1 ||
+            Number(index) < 0 ||
+            Number(index) > array.length - 1 ||
             !number ||
             !index
               ? true
@@ -270,8 +270,8 @@ export const ListPage: React.FC = () => {
             isLoading ||
             !index ||
             array.length < 2 ||
-            index! < 0 ||
-            index! > array.length - 1
+            Number(index) < 0 ||
+            Number(index) > array.length - 1
               ? true
               : undefined
           }

@@ -1,47 +1,54 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
+import { Stack } from "../../classes/stack";
 import styles from "./stack-page.module.css";
 import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
 import { Button } from "../ui/button/button";
 import { ElementStates } from "../../types/element-states";
 import { timeout } from "../../utils/timeout";
+import { circleObj } from "../../classes/stack";
+import { ICircleElement } from "../list-page/list-page";
 
 export const StackPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [stackArray, setStackArray] = useState<
-    Array<{ el: number | string; state: ElementStates }>
-  >([]);
+  const [stackArray, setStackArray] = useState<Array<ICircleElement>>([]);
+
+  const stack = useMemo(() => new Stack<ICircleElement>(), []);
 
   const handleAddElement = async () => {
     setIsLoading(true);
     setInputValue("");
-    const tempArray = stackArray;
-    if (tempArray.length > 0)
-      tempArray[tempArray.length - 1].state = ElementStates.Default;
-    tempArray.push({ el: inputValue, state: ElementStates.Default });
-    setStackArray([...tempArray]);
+    if (stack.getSize()) {
+      stack.peak()!.state = ElementStates.Default;
+      stack.peak()!.head = "";
+    }
+    stack.push(circleObj(inputValue));
+    setStackArray([...stack.container]);
     await timeout(500);
-    tempArray[tempArray.length - 1].state = ElementStates.Changing;
-    setStackArray([...tempArray]);
+    stack.peak()!.state = ElementStates.Changing;
+    stack.peak()!.head = "top";
+    setStackArray([...stack.container]);
     setIsLoading(false);
   };
 
   const handleDeleteElement = async () => {
     setIsLoading(true);
-    const tempArray = stackArray;
-    tempArray.pop();
-    setStackArray([...tempArray]);
+    stack.pop();
+    setStackArray([...stack.container]);
     await timeout(500);
-    if (tempArray.length > 0)
-      tempArray[tempArray.length - 1].state = ElementStates.Changing;
-    setStackArray([...tempArray]);
+    if (stack.getSize()) {
+      stack.peak()!.state = ElementStates.Changing;
+      stack.peak()!.head = "top";
+    }
+    setStackArray([...stack.container]);
     setIsLoading(false);
   };
 
   const handleResetStack = () => {
-    setStackArray([]);
+    stack.clear();
+    setStackArray([...stack.container]);
   };
 
   return (
@@ -83,7 +90,7 @@ export const StackPage: React.FC = () => {
               state={el.state}
               key={i}
               index={i}
-              head={el.state === ElementStates.Changing ? "top" : ""}
+              head={el.head}
             />
           );
         })}

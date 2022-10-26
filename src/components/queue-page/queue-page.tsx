@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./queue-page.module.css";
+import { Queue } from "../../classes/queue";
 import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
 import { Button } from "../ui/button/button";
 import { ElementStates } from "../../types/element-states";
 import { timeout } from "../../utils/timeout";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { ICircleElement } from "../list-page/list-page";
 
 export const QueuePage: React.FC = () => {
+
+  const queue = useMemo(() => new Queue<ICircleElement>(6), []);
+
+  console.log(queue)
   const DefaultArray = Array.from({ length: 7 }, (v, i) => ({
     el: "",
     state: ElementStates.Default,
