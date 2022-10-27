@@ -9,6 +9,7 @@ import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { timeout } from "../../utils/timeout";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { LinkedList } from "../../classes/linkedList";
+import { time } from "console";
 
 export interface ICircleElement {
   el: number | string;
@@ -23,13 +24,10 @@ export const ListPage: React.FC = () => {
   const [array, setArray] = useState<Array<ICircleElement>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-
-
-
+  const defaultNumArray: Array<string | number> = [0, 34, 8, 1];
 
   const setDefaultArray = () => {
-    const numArr = [0, 34, 8, 1];
-    const defaultArray = numArr.map(
+    const defaultArray = defaultNumArray.reverse().map(
       (n): ICircleElement => ({
         el: n,
         state: ElementStates.Default,
@@ -46,59 +44,73 @@ export const ListPage: React.FC = () => {
     setDefaultArray();
   }, []);
 
-
-  const linkedList = useMemo(()=> new LinkedList,[])
-
-
+  const linkedList = useMemo(
+    () => new LinkedList<string | number>(defaultNumArray),
+    []
+  );
 
   const addToHead = async () => {
     setIsLoading(true);
     const tempArr = array;
+    linkedList.prepend(number);
     tempArr[0].head = (
-      <Circle isSmall={true} state={ElementStates.Changing} letter={number} />
+      <Circle
+        isSmall={true}
+        state={ElementStates.Changing}
+        letter={linkedList.getByIndex(0)!}
+      />
     );
+    setArray([...tempArr]);
     await timeout(SHORT_DELAY_IN_MS);
     tempArr[0].head = null;
+    setArray([...tempArr]);
     tempArr.unshift({
-      el: number,
-      state: ElementStates.Default,
+      el: linkedList.getByIndex(0)!,
+      state: ElementStates.Modified,
       head: "head",
       tail: null,
     });
-    tempArr[0].state = ElementStates.Modified;
     setArray([...tempArr]);
     await timeout(SHORT_DELAY_IN_MS);
     tempArr[0].state = ElementStates.Default;
-    setArray([...tempArr]);
-
     setNumber("");
-    setArray([...tempArr]);
     setIsLoading(false);
   };
 
   const addToTail = async () => {
     setIsLoading(true);
     const tempArr = array;
-    const n = tempArr.length;
-
-    tempArr[n - 1].head = (
-      <Circle isSmall={true} state={ElementStates.Changing} letter={number} />
-    );
-    await timeout(SHORT_DELAY_IN_MS);
-    tempArr[n - 1].head = null;
-    tempArr[n - 1].tail = null;
-
+    linkedList.append(number);
+    const length = linkedList.getLength();
+    for (let i = 0; i < length - 1; i++) {
+      tempArr[i].state = ElementStates.Changing;
+      tempArr[i].head = (
+        <Circle
+          isSmall={true}
+          state={ElementStates.Changing}
+          letter={linkedList.getByIndex(length - 1)!}
+        />
+      );
+      if (i > 0) {
+        tempArr[i - 1].head = "";
+        tempArr[0].head = "head";
+      }
+      setArray([...tempArr]);
+      await timeout(SHORT_DELAY_IN_MS);
+    }
+    tempArr[length - 2].head = null;
+    tempArr[length - 2].tail = null;
     tempArr.push({
-      el: number,
+      el: linkedList.getByIndex(length - 1)!,
       state: ElementStates.Modified,
       head: null,
       tail: "tail",
     });
     setArray([...tempArr]);
-
     await timeout(SHORT_DELAY_IN_MS);
-    tempArr[tempArr.length - 1].state = ElementStates.Default;
-
+    tempArr.forEach((el) => {
+      el.state = ElementStates.Default;
+    });
     setNumber("");
     setIsLoading(false);
   };
@@ -110,14 +122,19 @@ export const ListPage: React.FC = () => {
       <Circle
         isSmall={true}
         state={ElementStates.Changing}
-        letter={tempArr[0].el}
+        letter={linkedList.getByIndex(0)!}
       />
     );
     tempArr[0].el = "";
     setArray([...tempArr]);
     await timeout(SHORT_DELAY_IN_MS);
+    linkedList.deleteHead();
     tempArr.shift();
+    tempArr[0].state = ElementStates.Modified;
     tempArr[0].head = "head";
+    setArray([...tempArr]);
+    await timeout(SHORT_DELAY_IN_MS);
+    tempArr[0].state = ElementStates.Default;
     setArray([...tempArr]);
     setIsLoading(false);
   };
@@ -125,74 +142,67 @@ export const ListPage: React.FC = () => {
   const deleteFromTail = async () => {
     setIsLoading(true);
     const tempArr = array;
-    tempArr[tempArr.length - 1].tail = (
+    const length = linkedList.getLength();
+    tempArr[length - 1].tail = (
       <Circle
         isSmall={true}
         state={ElementStates.Changing}
-        letter={tempArr[tempArr.length - 1].el}
+        letter={linkedList.getByIndex(length - 1)!}
       />
     );
-    tempArr[tempArr.length - 1].el = "";
+    tempArr[length - 1].el = "";
     setArray([...tempArr]);
     await timeout(SHORT_DELAY_IN_MS);
+    linkedList.deleteByIndex(length - 1);
     tempArr.pop();
+    tempArr[tempArr.length - 1].state = ElementStates.Modified;
     tempArr[tempArr.length - 1].tail = "tail";
+    setArray([...tempArr]);
+    await timeout(SHORT_DELAY_IN_MS);
+    tempArr[tempArr.length - 1].state = ElementStates.Default;
     setArray([...tempArr]);
     setIsLoading(false);
   };
 
   const addByIndex = async () => {
-    if (Number(index) == 0) {
-      addToHead();
-      return;
-    }
-
     setIsLoading(true);
     const tempArr = array;
-
+    const length = linkedList.getLength();
     for (let i = 0; i <= Number(index); i++) {
-      const prevHead = tempArr[i].head;
       tempArr[i].state = ElementStates.Changing;
       tempArr[i].head = (
         <Circle isSmall={true} state={ElementStates.Changing} letter={number} />
       );
+      if (i > 0) {
+        tempArr[i - 1].head = "";
+        tempArr[0].head = "head";
+      }
       setArray([...tempArr]);
       await timeout(SHORT_DELAY_IN_MS);
-      tempArr[i].head = prevHead;
     }
-
-    tempArr[Number(index)].state = ElementStates.Default;
+    tempArr[Number(index)].head = "";
+    linkedList.addByIndex(number, Number(index));
     tempArr.splice(Number(index), 0, {
-      el: number,
-      state: ElementStates.Default,
+      el: linkedList.getByIndex(Number(index))!,
+      state: ElementStates.Modified,
       head: null,
       tail: null,
     });
-
-    tempArr[Number(index)].state = ElementStates.Modified;
-
     setArray([...tempArr]);
     await timeout(SHORT_DELAY_IN_MS);
     tempArr.forEach((el) => (el.state = ElementStates.Default));
-
     setArray([...tempArr]);
+    setNumber("");
     setIsLoading(false);
   };
 
   const deleteByIndex = async () => {
-    if (Number(index) == 0) {
+    if (Number(index) === 0) {
       deleteFromHead();
       return;
     }
-
-    if (Number(index) == array.length - 1) {
-      deleteFromTail();
-      return;
-    }
-
     setIsLoading(true);
     const tempArr = array;
-
     for (let i = 0; i <= Number(index); i++) {
       tempArr[i].state = ElementStates.Changing;
       setArray([...tempArr]);
@@ -211,13 +221,14 @@ export const ListPage: React.FC = () => {
     await timeout(SHORT_DELAY_IN_MS);
     tempArr[Number(index)].tail = "";
     tempArr[Number(index)].state = ElementStates.Default;
-
     tempArr.splice(Number(index), 1);
-
+    if (Number(index) === tempArr.length - 1) {
+      tempArr[tempArr.length - 1].tail = "tail";
+    }
     setArray([...tempArr]);
     await timeout(SHORT_DELAY_IN_MS);
     tempArr.forEach((el) => (el.state = ElementStates.Default));
-
+    linkedList.deleteByIndex(Number(index));
     setArray([...tempArr]);
     setIsLoading(false);
   };

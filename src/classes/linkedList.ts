@@ -1,3 +1,5 @@
+import { lutimes } from "fs";
+
 export class QNode<T> {
   value: T;
   next: QNode<T> | null = null;
@@ -15,6 +17,7 @@ interface ILinkedList<T> {
   deleteByIndex: (i: number) => void;
   deleteHead: () => void;
   getByIndex: (index: number) => T | null;
+  getLength: ()=> number;
 
 }
 
@@ -63,7 +66,7 @@ export class LinkedList<T> implements ILinkedList<T> {
       let current = this.head;
       let counter = 0;
       let prev = null;
-      while (counter < i) {
+      while (counter < i && current) {
         prev = current;
         current = current!.next;
         counter++;
@@ -115,6 +118,10 @@ export class LinkedList<T> implements ILinkedList<T> {
       curruntIndex++;
     }
     return currentEl ? currentEl.value : null;
+  }
+
+  getLength() {
+    return this.length
   }
 
 }
