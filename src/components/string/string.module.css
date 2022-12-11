@@ -1,0 +1,11 @@
+.formContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 522px;
+}
+
+.circlesContainer {
+  display: flex;
+  flex-direction: row;
+}

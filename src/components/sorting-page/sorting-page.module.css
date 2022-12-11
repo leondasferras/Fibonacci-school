@@ -1,0 +1,30 @@
+.buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  max-width: 1000px;
+}
+
+.radioWrapper {
+  display: flex;
+  flex-direction: row;
+  gap:30px;
+
+}
+
+.methodButtonsWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+
+.graph {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  margin-top: 80px;
+  gap:15px;
+}
+

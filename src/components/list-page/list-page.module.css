@@ -1,0 +1,32 @@
+.buttonsWrapper {
+  width: 952px;
+  margin:0 auto;
+  display: grid;
+  grid-template-columns: 1.15fr repeat(4, 1fr);
+  grid-template-rows: max-content max-content;
+  grid-gap: 10px;
+  margin-bottom: 125px;
+}
+
+.buttonsWrapper > :nth-child(7) {
+  grid-column: 2 / 4;
+}
+
+.buttonsWrapper > :nth-child(8) {
+  grid-column: 4 / 6;
+}
+
+.circlesWrapper { 
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.circleWrapper > svg {
+margin-top: 30px;
+margin-right: 5px;
+}
+
+.circleWrapper {
+  display: flex;
+}
