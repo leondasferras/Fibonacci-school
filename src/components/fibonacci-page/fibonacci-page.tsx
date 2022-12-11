@@ -46,6 +46,11 @@ export const FibonacciPage: React.FC = () => {
           isLoader={isLoading}
           disabled={Number(number) > 19 || Number(number) < 1 || !number}
         ></Button>
+      <Button
+        text="Кнопка"
+        isLoader={false}
+        onClick={()=>alert("кнопка работает")}
+      ></Button>
       </div>
       <div className={`${styles.circlesContainer} mt-20`}>
         {numbersArray.map((n, i) => (
