@@ -11,6 +11,27 @@ import { swap } from "../../utils/swap";
 import { ICircleElement } from "../list-page/list-page";
 
 
+// const reverseString = (string:string) => {
+//   const stringArray = [...string];
+//   //const stringArray = string.split("");
+//   let start = 0;
+//   let end = stringArray.length - 1;
+
+//   let result = [];
+
+//   while (start < end) {
+//     swap(start, end, stringArray);
+//     result.push([start, end]);
+
+//     start++;
+//     end--;
+//   }
+
+//   return result
+// }
+
+
+
 export const StringComponent: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [string, setString] = useState<string>("");
@@ -27,6 +48,28 @@ export const StringComponent: React.FC = () => {
 
     let start = 0;
     let end = circlesWithStatus.length - 1;
+
+
+
+    // let instr = reverseString(string);
+
+    // for (let index = 0; index < instr.length; index++) {
+    //   const step = instr[index];
+    //   let start = step[0];
+    //   let end = step[1];
+
+
+    //   circlesWithStatus[start].state = ElementStates.Changing;
+    //   circlesWithStatus[end].state = ElementStates.Changing;
+    //   await timeout(DELAY_IN_MS);
+    //   setCircles([...circlesWithStatus]);
+    //   swap(start, end, circlesWithStatus);
+    //   await timeout(DELAY_IN_MS);
+    //   circlesWithStatus[start].state = ElementStates.Modified;
+    //   circlesWithStatus[end].state = ElementStates.Modified;
+    //   setCircles([...circlesWithStatus]);
+    // }
+
 
     while (start <= end) {
       circlesWithStatus[start].state = ElementStates.Changing;
