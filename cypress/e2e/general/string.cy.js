@@ -1,19 +1,38 @@
-
+import {DELAY_IN_MS} from '../../../src/constants/delays'
 
 describe("String component works correct", function () {
 
-before(()=> {
-  cy.visit('http://localhost:3000/recursion')
-})
+  beforeEach(() => {
+    cy.visit("http://localhost:3000/recursion");
+    cy.get("input").as("input");
+    cy.contains("button", "Развернуть").as("button");
+  });
 
-it('Button disabled when it needed', () => {
-  cy.get('input').should('be.empty')
-  // cy.get('button').contains('p', 'Развернуть').should('be.disabled')
-  cy.contains('button', 'Развернуть').should('be.disabled')
-  cy.get('input').type('12345')
-  cy.contains('button', 'Развернуть').should('not.be.disabled')
-  cy.get('input').clear()
-  cy.contains('button', 'Развернуть').should('be.disabled')
-})
+  it("Button disabled when it needed", () => {
+    cy.get("@input").should("be.empty");
+    cy.get("@button").should("be.disabled");
+    cy.get("@input").type('12345');
+    cy.get("@button").should("not.be.disabled");
+    cy.get("@input").clear();
+    cy.get("@button").should("be.disabled");
+  });
 
-})
+  it("Button disabled when it needed", () => {
+    cy.get("@input").type("123456");
+    cy.get("@button").click();
+    cy.wait(DELAY_IN_MS);
+    cy.get("@input").type("not.be.empty");
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+});
