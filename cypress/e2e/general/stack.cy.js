@@ -82,7 +82,6 @@ describe("Stack component works correct", () => {
       cy.get("@input").type(n);
       cy.get("@addButton").click();
     });
-
     cy.get("@clrButton").click();
     cy.get("[data-testid=circle]").should("not.exist");
   });
