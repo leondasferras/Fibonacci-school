@@ -242,6 +242,7 @@ export const ListPage: React.FC = () => {
           getInputValue={setNumber}
           value={number}
           placeholder="Введите значение"
+          data-testid = "valueInput"
         />
         <Button
           onClick={addToHead}
@@ -270,6 +271,7 @@ export const ListPage: React.FC = () => {
           value={index!}
           placeholder="Введите индекс"
           isLimitText={true}
+          data-testid = "indexInput"
         />
         <Button
           onClick={addByIndex}
