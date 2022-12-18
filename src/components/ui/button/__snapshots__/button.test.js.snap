@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Тест рендера кнопки: Заблокированная кнопка рендерится без ошибок 1`] = `
+<button
+  className="text text_type_button text_color_primary button
+  
+  
+  "
+  disabled={true}
+  type="button"
+>
+  <p
+    className="text "
+  >
+    Кнопка
+  </p>
+</button>
+`;
+
+exports[`Тест рендера кнопки: Кнопка без текста рендерится без ошибок 1`] = `
+<button
+  className="text text_type_button text_color_primary button
+  
+  
+  "
+  type="button"
+>
+  <p
+    className="text "
+  />
+</button>
+`;
+
+exports[`Тест рендера кнопки: Кнопка с индикацией загрузки рендерится без ошибок 1`] = `
+<button
+  className="text text_type_button text_color_primary button
+  
+  loader
+  "
+  disabled={true}
+  type="button"
+>
+  <img
+    alt="Загрузка."
+    className="loader_icon"
+    src="loader.svg"
+  />
+</button>
+`;
+
+exports[`Тест рендера кнопки: Кнопка с текстом рендерится без ошибок 1`] = `
+<button
+  className="text text_type_button text_color_primary button
+  
+  
+  "
+  type="button"
+>
+  <p
+    className="text "
+  >
+    Кнопка
+  </p>
+</button>
+`;
