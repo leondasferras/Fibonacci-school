@@ -1,11 +1,11 @@
 import { DELAY_IN_MS } from "../../../src/constants/delays";
-import { borderColorStyles } from "../../constansts";
+import { borderColorStyles, circleId} from "../../constansts";
 
 const testArr = [1, 2, 3, 4, 5];
 
 describe("Stack component works correct", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/stack");
+    cy.visit("stack");
     cy.get("input").as("input");
     cy.contains("button", "Добавить").as("addButton");
     cy.contains("button", "Удалить").as("delButton");
@@ -26,7 +26,7 @@ describe("Stack component works correct", () => {
       cy.get("@input").type(n);
       cy.get("@addButton").click();
 
-      cy.get("[data-testid=circle]").as("circles");
+      cy.get(circleId).as("circles");
       cy.get("@circles").last().as("lastCircle");
       cy.get("@lastCircle").should(
         "have.css",
@@ -67,7 +67,7 @@ describe("Stack component works correct", () => {
       cy.get("@delButton").click();
       cy.wait(DELAY_IN_MS);
       if (index == testArr.length - 1) break;
-      cy.get("[data-testid=circle]").last().as("lastCircle");
+      cy.get(circleId).last().as("lastCircle");
       cy.get("@lastCircle").should(
         "have.css",
         "border-color",
@@ -83,6 +83,6 @@ describe("Stack component works correct", () => {
       cy.get("@addButton").click();
     });
     cy.get("@clrButton").click();
-    cy.get("[data-testid=circle]").should("not.exist");
+    cy.get(circleId).should("not.exist");
   });
 });

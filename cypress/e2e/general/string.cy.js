@@ -1,5 +1,5 @@
 import { DELAY_IN_MS } from "../../../src/constants/delays";
-import { borderColorStyles } from "../../constansts";
+import { borderColorStyles, circleId } from "../../constansts";
 
 const testCirclesStyle = (index1, index2, borderColorStyles) => {
   cy.get("@circles")
@@ -12,7 +12,7 @@ const testCirclesStyle = (index1, index2, borderColorStyles) => {
 
 describe("String component works correct", function () {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/recursion");
+    cy.visit("recursion");
     cy.get("input").as("input");
     cy.contains("button", "Развернуть").as("button");
   });
@@ -32,7 +32,7 @@ describe("String component works correct", function () {
 
     cy.wait(DELAY_IN_MS);
 
-    cy.get("[data-testid=circle]").as("circles");
+    cy.get(circleId).as("circles");
 
     testCirclesStyle(0, -1, borderColorStyles.default);
     cy.wait(DELAY_IN_MS);

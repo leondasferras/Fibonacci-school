@@ -1,5 +1,5 @@
 import { SHORT_DELAY_IN_MS } from "../../../src/constants/delays";
-import { borderColorStyles } from "../../constansts";
+import { borderColorStyles, circleId, smallCircleId } from "../../constansts";
 
 const testArr = [1, 8, 34, 0];
 
@@ -19,7 +19,7 @@ const checkStyles = (index) => {
 
   cy.get("@circle")
     .prev()
-    .find("[data-testid=smallCircle]")
+    .find(smallCircleId)
     .should("have.text", "123")
     .and("have.css", "border-color", borderColorStyles.changing);
 
@@ -37,7 +37,7 @@ const checkStyles = (index) => {
 
 describe("List component works correct", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/list");
+    cy.visit("list");
     cy.get("[data-testid=valueInput]").as("valueInput");
     cy.get("[data-testid=indexInput]").as("indexInput");
     cy.contains("button", "Добавить в head").as("addHeadBtn");
@@ -46,7 +46,7 @@ describe("List component works correct", () => {
     cy.contains("button", "Удалить из head").as("delHeadBtn");
     cy.contains("button", "Удалить из tail").as("delTailBtn");
     cy.contains("button", "Удалить по индексу").as("delIndxBtn");
-    cy.get("[data-testid=circle]").as("circles");
+    cy.get(circleId).as("circles");
   });
 
   it("Buttons disabled when it needed", () => {
@@ -86,7 +86,7 @@ describe("List component works correct", () => {
     cy.get("@circles")
       .first()
       .prev()
-      .find("[data-testid=smallCircle]")
+      .find(smallCircleId)
       .should("have.text", "123")
       .and("have.css", "border-color", borderColorStyles.changing);
 
@@ -199,7 +199,7 @@ describe("List component works correct", () => {
       .first()
       .next()
       .next()
-      .find("[data-testid=smallCircle]")
+      .find(smallCircleId)
       .should("have.css", "border-color", borderColorStyles.changing)
       .and("have.text", "1");
 
@@ -228,7 +228,7 @@ describe("List component works correct", () => {
       .last()
       .next()
       .next()
-      .find("[data-testid=smallCircle]")
+      .find(smallCircleId)
       .should("have.css", "border-color", borderColorStyles.changing)
       .and("have.text", "0");
 
@@ -297,7 +297,7 @@ describe("List component works correct", () => {
       .eq(2)
       .next()
       .next()
-      .find("[data-testid=smallCircle]")
+      .find(smallCircleId)
       .should("have.css", "border-color", borderColorStyles.changing)
       .and("have.text", "34");
 

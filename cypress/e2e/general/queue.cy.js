@@ -1,11 +1,11 @@
 import { SHORT_DELAY_IN_MS } from "../../../src/constants/delays";
-import { borderColorStyles } from "../../constansts";
+import { borderColorStyles, circleId } from "../../constansts";
 
 const testArr = [1, 2, 3, 4, 5, 6, 7];
 
 describe("Queue component works correct", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/queue");
+    cy.visit("queue");
     cy.get("input").as("input");
     cy.contains("button", "Добавить").as("addButton");
     cy.contains("button", "Удалить").as("delButton");
@@ -24,7 +24,7 @@ describe("Queue component works correct", () => {
     testArr.forEach((el, i) => {
       cy.get("@input").type(el);
       cy.get("@addButton").click();
-      cy.get("[data-testid=circle]").as("circles");
+      cy.get(circleId).as("circles");
       cy.get("@circles").eq(i).as("addedCircle");
       cy.get("@addedCircle").should(
         "have.css",
@@ -54,7 +54,7 @@ describe("Queue component works correct", () => {
 
     for (let index = 0; index < testArr.length; index++) {
       cy.get("@delButton").click();
-      cy.get("[data-testid=circle]").as("circles");
+      cy.get(circleId).as("circles");
       cy.get("@circles").eq(index).as("circleToDelete");
 
       cy.get("@circleToDelete").should(
@@ -88,6 +88,6 @@ describe("Queue component works correct", () => {
       cy.get("@addButton").click();
     });
     cy.get("@clrButton").click();
-    cy.get("[data-testid=circle]").invoke("text").should("be.empty");
+    cy.get(circleId).invoke("text").should("be.empty");
   });
 });

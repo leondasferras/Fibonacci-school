@@ -1,8 +1,9 @@
 import { SHORT_DELAY_IN_MS } from "../../../src/constants/delays";
+import { circleId } from "../../constansts";
 
 describe("Fibonacci component works correct", function () {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/fibonacci");
+    cy.visit("fibonacci");
     cy.get("input").as("input");
     cy.contains("button", "Развернуть").as("button");
   });
@@ -24,7 +25,7 @@ describe("Fibonacci component works correct", function () {
 
     const result = [0, 1, 1, 2, 3, 5];
 
-    cy.get("[data-testid=circle]").each(($circle, index) => {
+    cy.get(circleId).each(($circle, index) => {
       cy.wrap($circle).find("p").should("have.text", result[index]);
     });
   });
